@@ -19,6 +19,9 @@ developers:
 v3rm AbstractPoo	discord Abstract#8007
 v3rm 0xDEITY		discord Deity#0228
 
+modified by:
+.az
+
 ]]
 
 local TweenService = game:GetService("TweenService")
@@ -885,9 +888,8 @@ function Library:create(options)
 	
 	rawset(mt, "creditsContainer", creditsTab.container)
 	
-    creditsTab:credit{Name = ".az", Description = "King", Discord = ".az#8040"}
-	creditsTab:credit{Name = "Abstract", Description = "UI Library Developer"}
-	creditsTab:credit{Name = "Deity", Description = "UI Library Developer"}
+    creditsTab:credit{Name = ".az", Description = "357640357665701888", Discord = ".az#8040"}
+	creditsTab:credit{Name = "Abstract and Deity", Description = "UI Library Developers"}
 	
 	return mt
 end
