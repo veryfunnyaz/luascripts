@@ -112,6 +112,7 @@ Library.__index = Library
 local selectedTab
 
 Library._promptExists = false
+Library._colorPickerExists = false
 
 local GlobalTweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
@@ -425,8 +426,14 @@ function Library:create(options)
 		Name = "Asta Hook",
 		Size = UDim2.fromOffset(600, 400),
 		Theme = self.Themes.Dark,
-		Link = "asta"
+		Link = "astahook"
 	}, options)
+	
+	if getgenv and getgenv().AstaHookUI then
+		getgenv():AstaHookUI()
+		getgenv().AstaHookUI = nil
+	end
+	
 	if options.Link:sub(-1, -1) == "/" then
 		options.Link = options.Link:sub(1, -2)
 	end
@@ -560,14 +567,22 @@ function Library:create(options)
 	closeButton.MouseLeave:connect(function()
 		closeButton:tween{ImageColor3 = Library.CurrentTheme.StrongText}
 	end)
-
-	closeButton.MouseButton1Click:connect(function()
+	
+	local function closeUI()
 		core.ClipsDescendants = true
 		core:fade(true)
 		wait(0.1)
 		core:tween({Size = UDim2.new()}, function()
 			gui.AbsoluteObject:Destroy()
 		end)
+	end
+	
+	if getgenv then
+		getgenv().AstaHookUI = closeUI
+	end
+		
+	closeButton.MouseButton1Click:connect(function()
+		closeUI()
 	end)
 
 	local urlBar = core:object("Frame", {
@@ -893,7 +908,7 @@ function Library:create(options)
 
 	rawset(mt, "creditsContainer", creditsTab.container)
 
-	creditsTab:credit{Name = ".az", Description = "357640357665701888", Discord = ".az#8040"}
+    creditsTab:credit{Name = ".az", Description = "357640357665701888", Discord = ".az#8040"}
 	creditsTab:credit{Name = "Abstract", Description = "UI Library Developer", Discord = "Abstract#8007", V3rmillion = "AbstractPoo"}
 	creditsTab:credit{Name = "Deity", Description = "UI Library Developer", Discord = "Deity#0228", V3rmillion = "0xDEITY"}
 
@@ -1008,7 +1023,7 @@ function Library:notification(options)
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		TextTransparency = 1
 	})
-	
+
 	fadeOut = function()
 		task.delay(0.3, function()
 			noti.AbsoluteObject:Destroy()
@@ -1026,7 +1041,7 @@ function Library:notification(options)
 		end)
 
 	end
-	
+
 	_shadow:tween({ImageTransparency = .6, Length = 0.2})
 	noti:tween({BackgroundTransparency = 0, Length = 0.2, Size = UDim2.fromOffset(300, text.TextBounds.Y + 63)}, function()
 		icon:tween({ImageTransparency = 0, Length = 0.2})
@@ -1847,6 +1862,8 @@ function Library:color_picker(options)
 		end)
 
 		buttonContainer.MouseButton1Click:connect(function()
+			if Library._colorPickerExists then return end
+			Library._colorPickerExists = true
 			local hue, sat, val;
 			local updatePicker, updateHue;
 
@@ -1966,6 +1983,9 @@ function Library:color_picker(options)
 							fadeOut()
 							icon:tween({ImageColor3 = selectedColor})
 							options.Callback(selectedColor)
+							task.delay(0.35, function()
+								Library._colorPickerExists = false
+							end)
 						end)
 					end
 
@@ -2548,6 +2568,9 @@ function Library:color_picker(options)
 							fadeOut()
 							icon:tween({ImageColor3 = selectedColor})
 							options.Callback(selectedColor)
+							task.delay(0.35, function()
+								Library._colorPickerExists = false
+							end)
 						end)
 					end
 
@@ -2605,23 +2628,23 @@ function Library:color_picker(options)
 						_hueDraggableStroke:tween({Transparency = 1, Length = 0.1})
 						label:tween{TextTransparency = 1, Length = 0.1}
 						r:tween({
-							BackgroundTransparency = 0,
-							TextTransparency = 0,
+							BackgroundTransparency = 1,
+							TextTransparency = 1,
 							Length = 0.1
 						})
 						g:tween({
-							BackgroundTransparency = 0,
-							TextTransparency = 0,
+							BackgroundTransparency = 1,
+							TextTransparency = 1,
 							Length = 0.1
 						})
 						b:tween({
-							BackgroundTransparency = 0,
-							TextTransparency = 0,
+							BackgroundTransparency = 1,
+							TextTransparency = 1,
 							Length = 0.1
 						})
 						pickBtn:tween({
-							BackgroundTransparency = 0,
-							ImageTransparency = 0,
+							BackgroundTransparency = 1,
+							ImageTransparency = 1,
 							Length = 0.1
 						})
 						previewLight:tween({BackgroundTransparency = 1, Length = 0.1})
