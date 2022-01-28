@@ -33,7 +33,7 @@ local Mouse = LocalPlayer:GetMouse()
 
 local Library = {
 	Themes = {
-        Astaroth = {
+		Astaroth = {
 			Main = Color3.fromRGB(40, 40, 40),
 			Secondary = Color3.fromRGB(24, 24, 24),
 			Tertiary = Color3.fromRGB(174, 18, 18),
