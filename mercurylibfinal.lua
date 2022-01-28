@@ -33,7 +33,7 @@ local Mouse = LocalPlayer:GetMouse()
 
 local Library = {
 	Themes = {
-		Astaroth = {
+        Astaroth = {
 			Main = Color3.fromRGB(40, 40, 40),
 			Secondary = Color3.fromRGB(24, 24, 24),
 			Tertiary = Color3.fromRGB(174, 18, 18),
@@ -56,7 +56,7 @@ local Library = {
 
 			StrongText = Color3.fromHSV(0, 0, 1),		
 			WeakText = Color3.fromHSV(0, 0, 172/255)
-		},]]--
+		},]]
 		Dark = {
 			Main = Color3.fromRGB(30, 30, 35),
 			Secondary = Color3.fromRGB(50, 50, 55),
@@ -112,7 +112,6 @@ Library.__index = Library
 local selectedTab
 
 Library._promptExists = false
-Library._colorPickerExists = false
 
 local GlobalTweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
@@ -426,7 +425,7 @@ function Library:create(options)
 		Name = "Asta Hook",
 		Size = UDim2.fromOffset(600, 400),
 		Theme = self.Themes.Dark,
-		Link = "" --path aqui
+		Link = "asta"
 	}, options)
 	if options.Link:sub(-1, -1) == "/" then
 		options.Link = options.Link:sub(1, -2)
@@ -894,7 +893,7 @@ function Library:create(options)
 
 	rawset(mt, "creditsContainer", creditsTab.container)
 
-    creditsTab:credit{Name = ".az", Description = "357640357665701888", Discord = ".az#8040"}
+	creditsTab:credit{Name = ".az", Description = "357640357665701888", Discord = ".az#8040"}
 	creditsTab:credit{Name = "Abstract", Description = "UI Library Developer", Discord = "Abstract#8007", V3rmillion = "AbstractPoo"}
 	creditsTab:credit{Name = "Deity", Description = "UI Library Developer", Discord = "Deity#0228", V3rmillion = "0xDEITY"}
 
@@ -1785,9 +1784,6 @@ function Library:color_picker(options)
 		Callback = function(color) end
 	}, options)
 
-	if Library._colorPickerExists and not options.Followup then return end
-	Library._colorPickerExists = true
-
 	local buttonContainer = self.container:object("TextButton", {
 		Theme = {BackgroundColor3 = "Secondary"},
 		Size = UDim2.new(1, -20, 0, 52)
@@ -2181,9 +2177,8 @@ function Library:color_picker(options)
 						brightness:tween{BackgroundTransparency = 1, Length = 0.1}
 						black:tween{BackgroundTransparency = 1, Length = 0.1}
 						_colorPickerDraggableStroke:tween({Transparency = 1, Length = 0.1}, function()
-							darkener.AbsoluteObject:Destroy()
 							task.delay(0.25, function()
-								Library._colorPickerExists = false
+								darkener.AbsoluteObject:Destroy()
 							end)
 						end)
 					end
@@ -2635,9 +2630,8 @@ function Library:color_picker(options)
 						_previewDarkIcon:tween({ImageTransparency = 1, Length = 0.1})
 
 						darkener:tween({BackgroundTransparency = 1, Length = 0.1}, function()
-							darkener.AbsoluteObject:Destroy()
 							task.delay(0.25, function()
-								Library._colorPickerExists = false
+								darkener.AbsoluteObject:Destroy()
 							end)
 						end)
 					end
