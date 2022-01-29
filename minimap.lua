@@ -27,10 +27,10 @@ end
 local RadarInfo = {
     Position = Vector2.new(200, 200),
     Radius = 100,
-    Scale = 0.1, -- Determinant factor on the effect of the relative position for the 2D integration
-    RadarBack = Color3.fromRGB(10, 10, 10),
-    RadarBorder = Color3.fromRGB(75, 75, 75),
-    LocalPlayerDot = Color3.fromRGB(255, 255, 255),
+    Scale = 0.3, -- Determinant factor on the effect of the relative position for the 2D integration
+    RadarBack = Color3.fromRGB(24, 24, 24),
+    RadarBorder = Color3.fromRGB(40, 40, 40),
+    LocalPlayerDot = Color3.fromRGB(174, 18, 18),
     PlayerDot = Color3.fromRGB(60, 170, 255),
     Team = Color3.fromRGB(0, 255, 0),
     Enemy = Color3.fromRGB(255, 0, 0),
