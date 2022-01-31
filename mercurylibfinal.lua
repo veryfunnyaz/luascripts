@@ -30,6 +30,7 @@ local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
+local HTTPService = game:GetService("HttpService")
 
 local Library = {
 	Themes = {
@@ -417,15 +418,34 @@ end
 	
 ]]
 
+local updateSettings = function() end
+
 function Library:set_status(txt)
 	self.statusText.Text = txt
 end
 
 function Library:create(options)
+
+	local settings = {
+		Theme = "Dark"
+	}
+
+	if readfile and writefile and isfile then
+		if not isfile("AstaHookSettings.json") then
+			writefile("AstaHookSettings.json", HTTPService:JSONEncode(settings))
+		end
+		settings = HTTPService:JSONDecode(readfile("AstaHookSettings.json"))
+		Library.CurrentTheme = Library.Themes[settings.Theme]
+		updateSettings = function(property, value)
+			settings[property] = value
+			writefile("AstaHookSettings.json", HTTPService:JSONEncode(settings))
+		end
+	end
+
 	options = self:set_defaults({
 		Name = "Asta Hook",
 		Size = UDim2.fromOffset(600, 400),
-		Theme = self.Themes.Dark,
+		Theme = self.Themes[settings.Theme],
 		Link = "astahook"
 	}, options)
 	
@@ -433,6 +453,8 @@ function Library:create(options)
 		getgenv():AstaHookUI()
 		getgenv().AstaHookUI = nil
 	end
+
+	
 	
 	if options.Link:sub(-1, -1) == "/" then
 		options.Link = options.Link:sub(1, -2)
@@ -678,7 +700,7 @@ function Library:create(options)
 		BackgroundTransparency = 1,
 		Position = UDim2.new(0, 5, 0.5, 0),
 		Size = UDim2.new(0, 15, 0, 15),
-		Image = "http://www.roblox.com/asset/?id=8656439985",
+		Image = "http://www.roblox.com/asset/?id=8656439985", --goat
 		Theme = {ImageColor3 = "StrongText"}
 	})
 
@@ -1600,7 +1622,6 @@ function Library:dropdown(options)
 	function methods:Set(text)
 		selectedText.Text = text
 		selectedText:tween{Size = UDim2.fromOffset(selectedText.TextBounds.X + 20, 20), Length = 0.05}
-		options.Callback(text)
 	end
 
 	function methods:RemoveItems(fitems)
@@ -1785,6 +1806,10 @@ function Library:button(options)
 
 	function methods:Fire()
 		options.Callback()
+	end
+
+	function methods:SetText(txt)
+		text.Text = txt
 	end
 
 	return methods
@@ -2893,6 +2918,7 @@ function Library:_theme_selector()
 
 			theme.MouseButton1Click:connect(function()
 				Library:change_theme(Library.Themes[themeName])
+				updateSettings("Theme", themeName)
 			end)
 		end
 	end
@@ -3413,7 +3439,6 @@ function Library:textbox(options)
 
 	return methods
 end
-
 
 return setmetatable(Library, {
 	__index = function(_, i)
