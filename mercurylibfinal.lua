@@ -34,7 +34,7 @@ local HTTPService = game:GetService("HttpService")
 
 local Library = {
 	Themes = {
-		Astaroth = {
+        Astaroth = {
 			Main = Color3.fromRGB(40, 40, 40),
 			Secondary = Color3.fromRGB(24, 24, 24),
 			Tertiary = Color3.fromRGB(174, 18, 18),
@@ -57,7 +57,7 @@ local Library = {
 
 			StrongText = Color3.fromHSV(0, 0, 1),		
 			WeakText = Color3.fromHSV(0, 0, 172/255)
-		},]]
+		},]]--
 		Dark = {
 			Main = Color3.fromRGB(30, 30, 35),
 			Secondary = Color3.fromRGB(50, 50, 55),
@@ -431,31 +431,31 @@ function Library:create(options)
 	}
 
 	if readfile and writefile and isfile then
-		if not isfile("AstaHookSettings.json") then
-			writefile("AstaHookSettings.json", HTTPService:JSONEncode(settings))
+		if not isfile("MercurySettings.json") then
+			writefile("MercurySettings.json", HTTPService:JSONEncode(settings))
 		end
-		settings = HTTPService:JSONDecode(readfile("AstaHookSettings.json"))
+		settings = HTTPService:JSONDecode(readfile("MercurySettings.json"))
 		Library.CurrentTheme = Library.Themes[settings.Theme]
 		updateSettings = function(property, value)
 			settings[property] = value
-			writefile("AstaHookSettings.json", HTTPService:JSONEncode(settings))
+			writefile("MercurySettings.json", HTTPService:JSONEncode(settings))
 		end
 	end
 
 	options = self:set_defaults({
-		Name = "Asta Hook",
+		Name = "Mercury",
 		Size = UDim2.fromOffset(600, 400),
 		Theme = self.Themes[settings.Theme],
-		Link = "astahook"
+		Link = "https://github.com/deeeity/mercury-lib"
 	}, options)
-	
-	if getgenv and getgenv().AstaHookUI then
-		getgenv():AstaHookUI()
-		getgenv().AstaHookUI = nil
+
+	if getgenv and getgenv().MercuryUI then
+		getgenv():MercuryUI()
+		getgenv().MercuryUI = nil
 	end
 
-	
-	
+
+
 	if options.Link:sub(-1, -1) == "/" then
 		options.Link = options.Link:sub(1, -2)
 	end
@@ -589,7 +589,7 @@ function Library:create(options)
 	closeButton.MouseLeave:connect(function()
 		closeButton:tween{ImageColor3 = Library.CurrentTheme.StrongText}
 	end)
-	
+
 	local function closeUI()
 		core.ClipsDescendants = true
 		core:fade(true)
@@ -598,11 +598,11 @@ function Library:create(options)
 			gui.AbsoluteObject:Destroy()
 		end)
 	end
-	
+
 	if getgenv then
-		getgenv().AstaHookUI = closeUI
+		getgenv().MercuryUI = closeUI
 	end
-		
+
 	closeButton.MouseButton1Click:connect(function()
 		closeUI()
 	end)
@@ -1287,7 +1287,12 @@ function Library:tab(options)
 end
 
 function Library:_resize_tab()
-	self.container.CanvasSize = UDim2.fromOffset(0, self.layout.AbsoluteContentSize.Y + 20)
+	if self.container.ClassName == "ScrollingFrame" then
+		self.container.CanvasSize = UDim2.fromOffset(0, self.layout.AbsoluteContentSize.Y + 20)
+	else
+		self.sectionContainer.Size = UDim2.new(1, -24, 0, self.layout.AbsoluteContentSize.Y + 20)
+		self.parentContainer.CanvasSize = UDim2.fromOffset(0, self.parentLayout.AbsoluteContentSize.Y + 20)
+	end
 end
 
 function Library:toggle(options)
@@ -1725,6 +1730,57 @@ function Library:dropdown(options)
 	end
 
 	return methods
+end
+
+function Library:section(options)
+	options = self:set_defaults({
+		Name = "Section"
+	}, options)
+
+	local sectionContainer = self.container:object("TextButton", {
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, -24, 0, 52)
+	}):round(7):stroke("Secondary", 2)
+	
+	local text = sectionContainer:object("TextLabel", {
+		Position = UDim2.new(0.5),
+		Text = options.Name,
+		TextSize = 18,
+		Theme = {
+			TextColor3 = "StrongText",
+			BackgroundColor3 = {"Secondary", -10}
+		},
+		TextXAlignment = Enum.TextXAlignment.Center,
+		AnchorPoint = Vector2.new(0.5, 0.5)
+	})
+	text.Size = UDim2.fromOffset(text.TextBounds.X + 4, text.TextBounds.Y)
+	
+	
+	local functionContainer = sectionContainer:object("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1
+	})
+	
+	
+	local layout = functionContainer:object("UIListLayout", {
+		Padding = UDim.new(0, 10),
+		HorizontalAlignment = Enum.HorizontalAlignment.Center
+	})
+
+	functionContainer:object("UIPadding", {
+		PaddingTop = UDim.new(0, 10)
+	})
+	
+	return setmetatable({
+		statusText = self.statusText,
+		container = functionContainer,
+		sectionContainer = sectionContainer,
+		parentContainer = self.container,
+		Theme = self.Theme,
+		core = self.core,
+		parentLayout = self.layout,
+		layout = layout
+	}, Library)
 end
 
 function Library:button(options)
