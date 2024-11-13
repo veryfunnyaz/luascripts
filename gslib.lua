@@ -4,7 +4,7 @@ local Passed, Statement = pcall(function()
 	local library = {
 		Renders = {},
 		Connections = {},
-		Folder = "PuppyWare", -- Change if wanted
+		Folder = "DotSense", -- Change if wanted
 		Assets = "Assets", -- Change if wanted
 		Configs = "Configs" -- Change if wanted
 	}
