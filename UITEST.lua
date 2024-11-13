@@ -1,3 +1,11 @@
+setfpscap(0)
+
+local cheatLoadingStartTick = os.clock()
+
+local tick = tick
+local env = getgenv()
+if env.Hack then return end
+
 --ANCHOR Game loading waiting
 if not game:IsLoaded() then
 	game.Loaded:Wait()
@@ -5875,6 +5883,7 @@ do
 	Menu["Settings"]["Menu Settings"]["Menu Accent"]["Color 1"].Changed:Connect(menusettings.updatecheataccent)
 end
 
+Library.UI:EventLog(string.format("Loaded in %s second(s)!", tostring(mathModule.truncateNumber(os.clock() - cheatLoadingStartTick, 3))), 5)
 UILibrary:Initialize()
 Library.UI:EventLog("Press INSERT or DELETE to open / close the Menu!", 5)
 Menu["Settings"]["Menu Settings"]["Watermark"]["Toggle"]["Enabled"] = true
