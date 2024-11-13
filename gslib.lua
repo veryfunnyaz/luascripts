@@ -4,7 +4,7 @@ local Passed, Statement = pcall(function()
 	local library = {
 		Renders = {},
 		Connections = {},
-		Folder = "DotSense", -- Change if wanted
+		Folder = "PuppyWare", -- Change if wanted
 		Assets = "Assets", -- Change if wanted
 		Configs = "Configs" -- Change if wanted
 	}
@@ -2367,10 +2367,6 @@ local Passed, Statement = pcall(function()
 			return Content
 		end
 	end
-		
-	if Passed then
-        	return Statement
-    	else
-        	error("An error occurred: " .. tostring(Statement))
-    	end
+    
+    return library
 end)
