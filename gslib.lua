@@ -2367,6 +2367,10 @@ local Passed, Statement = pcall(function()
 			return Content
 		end
 	end
+		
+	if Passed then
+        	return Statement
+    	else
+        	error("An error occurred: " .. tostring(Statement))
+    	end
 end)
-
-return library
